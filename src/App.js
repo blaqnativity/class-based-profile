@@ -1,25 +1,65 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import img from "./assets/img/profile.jpg";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      person: {
+        fullName: "Olukayode Kay",
+        bio: "A passionate software developer.",
+        imgSrc: img,
+        profession: "Software Engineer",
+      },
+      shows: false,
+      timeSinceMounted: 0,
+    };
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.setState((prevState) => ({
+        timeSinceMounted: prevState.timeSinceMounted + 1,
+      }));
+    }, 1000); // Updates every second
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
+  toggleShow = () => {
+    this.setState((prevState) => ({
+      shows: !prevState.shows,
+    }));
+  };
+
+  render() {
+    return (
+      <div style={{ textAlign: "center", marginTop: "50px" }}>
+        <button onClick={this.toggleShow}>
+          {this.state.shows ? "Hide Profile" : "Show Profile"}
+        </button>
+
+        {this.state.shows && (
+          <div style={{ marginTop: "20px" }}>
+            <img
+              src={this.state.person.imgSrc}
+              alt="Profile"
+              style={{ width: "200px" }}
+            />
+            <h2>{this.state.person.fullName}</h2>
+            <p>{this.state.person.bio}</p>
+            <h3>{this.state.person.profession}</h3>
+          </div>
+        )}
+
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Component has been mounted for: {this.state.timeSinceMounted} seconds
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default App;
